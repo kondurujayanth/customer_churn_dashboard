@@ -15,52 +15,35 @@ st.set_page_config(
 # Custom Styling
 # ---------------------------------------------------
 st.markdown("""
-    <style>
-        body {
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-        }
-        .main {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #004d7a;
-            text-align: center;
-            font-size: 2.3rem;
-        }
-        .stButton>button {
-            background-color: #004d7a;
-            color: white;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.6rem 1.2rem;
-            transition: 0.3s;
-        }
-        .stButton>button:hover {
-            background-color: #0074b7;
-        }
-        .sidebar-content {
-            padding: 1rem;
-            color: #333333;
-        }
-        .sidebar-content h2 {
-            color: #004d7a;
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-        }
-        .sidebar-content p {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-        .sidebar-content ul {
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-    </style>
+<style>
+.stApp {
+    background: linear-gradient(135deg, #e0f7fa, #fce4ec, #fff3e0);
+    color: #333333;
+}
+.section {
+    background-color: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.stButton>button {
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 25px;
+    transition: 0.3s;
+}
+.stButton>button:hover {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    transform: scale(1.03);
+}
+h1, h2, h3 {
+    color: #004d7a;
+}
+</style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
@@ -174,3 +157,4 @@ st.markdown("""
     🤖 Built with ❤️ using Streamlit & FastAPI
 </div>
 """, unsafe_allow_html=True)
+
