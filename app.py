@@ -16,10 +16,22 @@ st.set_page_config(
 # ---------------------------------------------------
 st.markdown("""
 <style>
+/* Main app background */
 .stApp {
     background: linear-gradient(135deg, #e0f7fa, #fce4ec, #fff3e0);
     color: #333333;
 }
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0072ff, #00c6ff, #89f7fe);
+    color: white;
+}
+[data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] p {
+    color: white !important;
+}
+
+/* Section containers */
 .section {
     background-color: white;
     border-radius: 18px;
@@ -27,6 +39,8 @@ st.markdown("""
     margin-bottom: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
+
+/* Buttons */
 .stButton>button {
     background: linear-gradient(90deg, #0072ff, #00c6ff);
     color: white;
@@ -40,6 +54,8 @@ st.markdown("""
     background: linear-gradient(90deg, #00c6ff, #0072ff);
     transform: scale(1.03);
 }
+
+/* Headings */
 h1, h2, h3 {
     color: #004d7a;
 }
@@ -50,50 +66,55 @@ h1, h2, h3 {
 # Sidebar - About Section
 # ---------------------------------------------------
 with st.sidebar:
-    st.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
     st.markdown("## ℹ️ About the App")
     st.markdown("""
-    This dashboard predicts whether a **telecom customer is likely to churn** based on their service usage and demographics.  
+    This interactive dashboard predicts whether a **telecom customer is likely to churn** based on their service usage, billing type, and demographics.  
 
-    **Features Used:**
-    - `InternetService_Fiber optic`: Whether the customer uses fiber optic internet.  
-    - `PaymentMethod_Electronic check`: If the payment method is electronic check.  
-    - `PaperlessBilling`: Indicates if the customer uses paperless billing.  
-    - `SeniorCitizen`: 1 if the customer is a senior citizen.  
-    - `StreamingTV_Yes`: Whether the customer uses streaming TV.  
-    - `MonthlyCharges`: Average monthly charges paid by the customer.  
+    ### 🔍 Features Used:
+    - **InternetService_Fiber optic:** Whether the customer uses fiber optic internet.  
+    - **PaymentMethod_Electronic check:** If the payment method is an electronic check.  
+    - **PaperlessBilling:** Indicates whether the customer uses paperless billing.  
+    - **SeniorCitizen:** 1 if the customer is a senior citizen, else 0.  
+    - **StreamingTV_Yes:** Whether the customer uses streaming TV.  
+    - **MonthlyCharges:** The average monthly bill paid by the customer.  
 
-    **Goal:**  
-    Identify customers **at risk of churn** to help the company improve retention.
+    ### 🎯 Goal:
+    Identify **customers at risk of churn** so the telecom company can take proactive retention steps.
 
-    **Model Type:**  
-    Classification (Binary) – predicts `Churn (1)` or `No Churn (0)`.
+    ### 🧠 Model Type:
+    Binary Classification Model  
+    (Predicts **Churn = 1** or **No Churn = 0**)
     """)
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # Main Page
 # ---------------------------------------------------
 st.title("💼 Customer Churn Prediction Dashboard")
-st.write("Predict whether a customer is likely to **churn** or stay based on their service details.")
+st.write("Predict whether a customer is likely to **churn** or stay based on their telecom service details.")
 
 # ---------------------------------------------------
 # Input Fields
 # ---------------------------------------------------
 with st.container():
     st.subheader("📋 Customer Information")
+    st.caption("""
+    ⚙️ **Input Details:**  
+    - For all dropdowns, select **0 = No** and **1 = Yes**.  
+    - Adjust the monthly charges to simulate customer billing scenarios.
+    """)
+    
     col1, col2 = st.columns(2)
 
     with col1:
-        internet_service = st.selectbox("Internet Service: Fiber Optic", [0, 1])
-        payment_method = st.selectbox("Payment Method: Electronic Check", [0, 1])
-        paperless_billing = st.selectbox("Paperless Billing", [0, 1])
+        internet_service = st.selectbox("Internet Service: Fiber Optic (0 = No, 1 = Yes)", [0, 1])
+        payment_method = st.selectbox("Payment Method: Electronic Check (0 = No, 1 = Yes)", [0, 1])
+        paperless_billing = st.selectbox("Paperless Billing (0 = No, 1 = Yes)", [0, 1])
 
     with col2:
-        senior_citizen = st.selectbox("Senior Citizen", [0, 1])
-        streaming_tv = st.selectbox("Streaming TV: Yes", [0, 1])
+        senior_citizen = st.selectbox("Senior Citizen (0 = No, 1 = Yes)", [0, 1])
+        streaming_tv = st.selectbox("Streaming TV: (0 = No, 1 = Yes)", [0, 1])
         monthly_charges = st.number_input(
-            "Monthly Charges", 
+            "Monthly Charges (in $)", 
             min_value=18.25, 
             max_value=118.75, 
             value=60.0, 
@@ -128,18 +149,18 @@ if st.button("🔍 Predict Churn"):
                 st.error("🚨 The customer is **likely to churn.**")
                 st.info("""
                 💡 **Suggestions to retain this customer:**
-                - Offer loyalty discounts or exclusive packages.
-                - Contact them via customer support to resolve possible issues.
-                - Promote bundle services (like internet + streaming).
+                - Offer loyalty discounts or personalized bundles.
+                - Improve customer engagement with dedicated support.
+                - Provide value-added services or better contract offers.
                 """)
             else:
                 st.success("✅ The customer is **not likely to churn.**")
                 st.balloons()
                 st.info("""
                 🎯 **Retention Tips:**
-                - Continue providing quality service.
-                - Offer referral rewards to maintain engagement.
-                - Keep satisfaction high with proactive communication.
+                - Maintain high service quality and reliability.
+                - Offer small loyalty rewards to encourage long-term stay.
+                - Keep consistent communication for engagement.
                 """)
         else:
             st.warning("⚠️ Unable to retrieve prediction from API. Please try again later.")
@@ -157,4 +178,3 @@ st.markdown("""
     🤖 Built with ❤️ using Streamlit & FastAPI
 </div>
 """, unsafe_allow_html=True)
-
