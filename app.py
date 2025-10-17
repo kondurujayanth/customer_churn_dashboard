@@ -22,9 +22,9 @@ st.markdown("""
     color: #333333;
 }
 
-/* Sidebar styling */
+/* Sidebar styling - toned down */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0072ff, #00c6ff, #89f7fe);
+    background: linear-gradient(180deg, #a1c4fd, #c2e9fb);
     color: white;
 }
 [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] p {
@@ -68,7 +68,7 @@ h1, h2, h3 {
 with st.sidebar:
     st.markdown("## ℹ️ About the App")
     st.markdown("""
-    This interactive dashboard predicts whether a **telecom customer is likely to churn** based on their service usage, billing type, and demographics.  
+    This dashboard predicts whether a **telecom customer is likely to churn** based on their service usage, billing type, and demographics.  
 
     ### 🔍 Features Used:
     - **InternetService_Fiber optic:** Whether the customer uses fiber optic internet.  
@@ -79,7 +79,7 @@ with st.sidebar:
     - **MonthlyCharges:** The average monthly bill paid by the customer.  
 
     ### 🎯 Goal:
-    Identify **customers at risk of churn** so the telecom company can take proactive retention steps.
+    Identify **customers at risk of churn** to help the company take proactive retention steps.
 
     ### 🧠 Model Type:
     Binary Classification Model  
