@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import plotly.graph_objects as go
 
 # ---------------------------------------------------
 # Page Config
@@ -100,28 +99,6 @@ if st.button("🔍 Predict Churn"):
                 st.success("✅ The customer is **not likely to churn.**")
                 st.balloons()
                 st.info("🎯 **Keep it up!** Continue delivering excellent service to maintain loyalty.")
-
-            # ---------------------------------------------------
-            # Visualizations
-            # ---------------------------------------------------
-            st.subheader("📊 Risk Factor Visualization")
-
-            fig = go.Figure(data=[
-                go.Bar(
-                    x=["InternetService", "PaymentMethod", "PaperlessBilling", "SeniorCitizen", "StreamingTV"],
-                    y=[internet_service, payment_method, paperless_billing, senior_citizen, streaming_tv],
-                    marker_color=['#004d7a', '#0074b7', '#00a8e8', '#0074b7', '#004d7a']
-                )
-            ])
-            fig.update_layout(
-                title="Customer Risk Factors",
-                xaxis_title="Features",
-                yaxis_title="Binary Value (0 or 1)",
-                plot_bgcolor='white',
-                height=400
-            )
-            st.plotly_chart(fig, use_container_width=True)
-
         else:
             st.warning("⚠️ Unable to retrieve prediction from API. Please try again later.")
 
