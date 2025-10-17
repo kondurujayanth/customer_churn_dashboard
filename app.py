@@ -8,7 +8,7 @@ st.set_page_config(
     page_title="💼 Customer Churn Prediction Dashboard",
     page_icon="🤖",
     layout="centered",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # ---------------------------------------------------
@@ -42,11 +42,54 @@ st.markdown("""
         .stButton>button:hover {
             background-color: #0074b7;
         }
+        .sidebar-content {
+            padding: 1rem;
+            color: #333333;
+        }
+        .sidebar-content h2 {
+            color: #004d7a;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .sidebar-content p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        .sidebar-content ul {
+            font-size: 0.9rem;
+            margin-left: 1rem;
+        }
     </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------
-# Title
+# Sidebar - About Section
+# ---------------------------------------------------
+with st.sidebar:
+    st.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
+    st.markdown("## ℹ️ About the App")
+    st.markdown("""
+    This dashboard predicts whether a **telecom customer is likely to churn** based on their service usage and demographics.  
+
+    **Features Used:**
+    - `InternetService_Fiber optic`: Whether the customer uses fiber optic internet.  
+    - `PaymentMethod_Electronic check`: If the payment method is electronic check.  
+    - `PaperlessBilling`: Indicates if the customer uses paperless billing.  
+    - `SeniorCitizen`: 1 if the customer is a senior citizen.  
+    - `StreamingTV_Yes`: Whether the customer uses streaming TV.  
+    - `MonthlyCharges`: Average monthly charges paid by the customer.  
+
+    **Goal:**  
+    Identify customers **at risk of churn** to help the company improve retention.
+
+    **Model Type:**  
+    Classification (Binary) – predicts `Churn (1)` or `No Churn (0)`.
+    """)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+# ---------------------------------------------------
+# Main Page
 # ---------------------------------------------------
 st.title("💼 Customer Churn Prediction Dashboard")
 st.write("Predict whether a customer is likely to **churn** or stay based on their service details.")
@@ -66,7 +109,13 @@ with st.container():
     with col2:
         senior_citizen = st.selectbox("Senior Citizen", [0, 1])
         streaming_tv = st.selectbox("Streaming TV: Yes", [0, 1])
-        monthly_charges = st.number_input("Monthly Charges", min_value=18.25, max_value=118.75, value=60.0, step=0.5)
+        monthly_charges = st.number_input(
+            "Monthly Charges", 
+            min_value=18.25, 
+            max_value=118.75, 
+            value=60.0, 
+            step=0.5
+        )
 
 # ---------------------------------------------------
 # Prediction Button
@@ -94,11 +143,21 @@ if st.button("🔍 Predict Churn"):
         if prediction is not None:
             if prediction == 1:
                 st.error("🚨 The customer is **likely to churn.**")
-                st.info("💡 **Suggestion:** Offer discounts, improve service experience, and provide retention incentives.")
+                st.info("""
+                💡 **Suggestions to retain this customer:**
+                - Offer loyalty discounts or exclusive packages.
+                - Contact them via customer support to resolve possible issues.
+                - Promote bundle services (like internet + streaming).
+                """)
             else:
                 st.success("✅ The customer is **not likely to churn.**")
                 st.balloons()
-                st.info("🎯 **Keep it up!** Continue delivering excellent service to maintain loyalty.")
+                st.info("""
+                🎯 **Retention Tips:**
+                - Continue providing quality service.
+                - Offer referral rewards to maintain engagement.
+                - Keep satisfaction high with proactive communication.
+                """)
         else:
             st.warning("⚠️ Unable to retrieve prediction from API. Please try again later.")
 
