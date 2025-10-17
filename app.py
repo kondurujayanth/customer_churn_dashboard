@@ -65,33 +65,26 @@ h1, h2, h3 {
 # ---------------------------------------------------
 # Sidebar - About Section
 # ---------------------------------------------------
-st.sidebar.markdown("""
-<div style="
-    background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #89f7fe);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    color: #333333;
-    font-family: 'Arial', sans-serif;
-">
-<p><b>About</b><br>This dashboard predicts the <b>risk of Heart Attack</b> using a trained Machine Learning (ML) model.</p>
+with st.sidebar:
+    st.markdown("## ℹ️ About the App")
+    st.markdown("""
+    This interactive dashboard predicts whether a **telecom customer is likely to churn** based on their service usage, billing type, and demographics.  
 
-<p><b>Features used:</b><br>
-- HighBP, HighChol<br>
-- Smoker, Diabetes<br>
-- PhysHlth, Sex
-</p>
+    ### 🔍 Features Used:
+    - **InternetService_Fiber optic:** Whether the customer uses fiber optic internet.  
+    - **PaymentMethod_Electronic check:** If the payment method is an electronic check.  
+    - **PaperlessBilling:** Indicates whether the customer uses paperless billing.  
+    - **SeniorCitizen:** 1 if the customer is a senior citizen, else 0.  
+    - **StreamingTV_Yes:** Whether the customer uses streaming TV.  
+    - **MonthlyCharges:** The average monthly bill paid by the customer.  
 
-<p>Built with 
-<b><br>FastAPI + Streamlit</b>
-</p>
+    ### 🎯 Goal:
+    Identify **customers at risk of churn** so the telecom company can take proactive retention steps.
 
-<p>
-Developed by
-<b><br>Konduru Jayanth</b></p>
-</div>
-""", unsafe_allow_html=True)
-
+    ### 🧠 Model Type:
+    Binary Classification Model  
+    (Predicts **Churn = 1** or **No Churn = 0**)
+    """)
 
 # ---------------------------------------------------
 # Main Page
@@ -181,8 +174,7 @@ if st.button("🔍 Predict Churn"):
 # ---------------------------------------------------
 st.markdown("""
 <hr>
-<p style="text-align:center; font-size:14px;">
-Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
-</p>
+<div style='text-align:center; font-size: 0.9rem; color: gray;'>
+    🤖 Built with ❤️ using Streamlit & FastAPI
+</div>
 """, unsafe_allow_html=True)
-
