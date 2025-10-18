@@ -20,14 +20,14 @@ st.markdown("""
 <style>
 /* Main App Background */
 .stApp {
-    background: linear-gradient(135deg, #FFF59D, #FFEB3B, #FDD835);
+    background: linear-gradient(135deg, #EF9A9A, #E57373, #C62828);
     font-family: 'Arial', sans-serif;
     color: #333;
 }
 
 /* Sidebar */
 [data-testid="stSidebar"] {
-    background: linear-gradient(135deg, #EF9A9A, #E57373, #C62828);
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #89f7fe);
     padding: 20px;
     border-radius: 15px;
     color: #333;
@@ -254,6 +254,7 @@ st.markdown("""
 Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
 </p>
 """, unsafe_allow_html=True)
+
 
 
 
