@@ -7,7 +7,7 @@ import datetime
 # Page Config
 # ----------------------------
 st.set_page_config(
-    page_title="💼 Customer Churn Prediction",
+    page_title=" Customer Churn Prediction",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -94,7 +94,7 @@ st.markdown("""
 # ----------------------------
 st.sidebar.markdown("""
 ### ℹ️ About the App
-This dashboard predicts the **risk of customer churn** in a telecom company.
+This dashboard predicts the **Risk of customer churn** in a telecom company.
 
 **Features Used:**
 - InternetService_Fiber optic  
@@ -108,8 +108,10 @@ This dashboard predicts the **risk of customer churn** in a telecom company.
 
 **Model Type:** Binary Classification (Churn=1, No Churn=0)
 
-Built with **FastAPI + Streamlit**  
-Developer: **Konduru Jayanth**
+Built with 
+<br>**FastAPI + Streamlit**  
+Developer: 
+<br>**Konduru Jayanth**
 """)
 
 # ----------------------------
@@ -254,6 +256,7 @@ st.markdown("""
 Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
 </p>
 """, unsafe_allow_html=True)
+
 
 
 
