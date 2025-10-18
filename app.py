@@ -1,181 +1,289 @@
 import streamlit as st
 import requests
+import pandas as pd
+import datetime
 
-# ---------------------------------------------------
+# ----------------------------
 # Page Config
-# ---------------------------------------------------
+# ----------------------------
 st.set_page_config(
-    page_title="Customer Churn Prediction",
+    page_title="💼 Customer Churn Prediction",
     page_icon="🤖",
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ---------------------------------------------------
-# Custom Styling
-# ---------------------------------------------------
+# ----------------------------
+# Custom CSS Styling
+# ----------------------------
 st.markdown("""
 <style>
-/* Main app background */
+/* Background gradient */
 .stApp {
-    background: linear-gradient(135deg, #e0f7fa, #fce4ec, #fff3e0);
+    background: linear-gradient(120deg, #e0f7fa, #fce4ec, #fff3e0);
     color: #333333;
 }
 
-/* Sidebar styling - toned down */
+/* Sidebar */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #a1c4fd, #c2e9fb);
-    color: white;
-}
-[data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] p {
-    color: white !important;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #89f7fe);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: #333333;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Section containers */
+/* Section card */
 .section {
     background-color: white;
-    border-radius: 18px;
+    border-radius: 15px;
     padding: 25px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Buttons */
+/* Smaller section for Input Summary */
+.small-section {
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+    font-size: 14px !important;
+}
+
+/* Button style */
 .stButton>button {
-    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    background-color: #0072ff;
     color: white;
     font-size: 18px;
     font-weight: bold;
     border-radius: 10px;
     padding: 10px 25px;
-    transition: 0.3s;
 }
 .stButton>button:hover {
-    background: linear-gradient(90deg, #00c6ff, #0072ff);
-    transform: scale(1.03);
+    background-color: #00c6ff;
+    color: white;
 }
 
-/* Headings */
-h1, h2, h3 {
-    color: #004d7a;
+/* Input style */
+.stNumberInput>div>div>input, .stSelectbox>div>div>select {
+    border-radius: 8px;
+    padding: 8px;
+}
+
+/* Compact Input Summary table */
+.table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+}
+.table-container th, .table-container td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: center;
+}
+.table-container th {
+    background-color: #f2f2f2;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------------------------------------------
-# Sidebar - About Section
-# ---------------------------------------------------
-with st.sidebar:
-    st.markdown("## ℹ️ About the App")
-    st.markdown("""
-    This dashboard predicts whether a **telecom customer is likely to churn** based on their service usage, billing type, and demographics.  
+# ----------------------------
+# Sidebar Info
+# ----------------------------
+st.sidebar.markdown("""
+<div>
+<p><b>About</b><br>This dashboard predicts the <b>risk of Customer Churn</b> in a telecom company using a trained ML model.</p>
 
-    ### 🔍 Features Used:
-    - **InternetService_Fiber optic:** Whether the customer uses fiber optic internet.  
-    - **PaymentMethod_Electronic check:** If the payment method is an electronic check.  
-    - **PaperlessBilling:** Indicates whether the customer uses paperless billing.  
-    - **SeniorCitizen:** 1 if the customer is a senior citizen, else 0.  
-    - **StreamingTV_Yes:** Whether the customer uses streaming TV.  
-    - **MonthlyCharges:** The average monthly bill paid by the customer.  
+<p><b>Features used:</b><br>
+- InternetService_Fiber optic<br>
+- PaymentMethod_Electronic check<br>
+- PaperlessBilling<br>
+- SeniorCitizen<br>
+- StreamingTV_Yes<br>
+- MonthlyCharges
+</p>
 
-    ### 🎯 Goal:
-    Identify **customers at risk of churn** to help the company take proactive retention steps.
+<p>Built with 
+<b>FastAPI + Streamlit</b></p>
 
-    ### 🧠 Model Type:
-    Binary Classification Model  
-    (Predicts **Churn = 1** or **No Churn = 0**)
-    """)
+<p>Developed by
+<b>Konduru Jayanth</b></p>
+</div>
+""", unsafe_allow_html=True)
 
-# ---------------------------------------------------
-# Main Page
-# ---------------------------------------------------
-st.title("🤖 AI Powered Customer Churn Prediction")
-st.write("Predict whether a customer is likely to **churn** or stay based on their telecom service details.")
+# ----------------------------
+# App Header
+# ----------------------------
+st.markdown('<div style="text-align:center"><h1>💼 AI Powered Customer Churn Prediction 🤖</h1></div>', unsafe_allow_html=True)
+st.markdown('<p style="text-align:center; font-size:18px;">Enter customer details to predict churn risk</p>', unsafe_allow_html=True)
 
-# ---------------------------------------------------
-# Input Fields
-# ---------------------------------------------------
+# ----------------------------
+# Input Section
+# ----------------------------
 with st.container():
     st.subheader("📋 Customer Information")
     st.caption("""
     ⚙️ **Input Details:**  
-    - For all dropdowns, select **0 = No** and **1 = Yes**.  
-    - Adjust the monthly charges to simulate customer billing scenarios.
+    - For dropdowns, select **0 = No** and **1 = Yes**.  
+    - Adjust the Monthly Charges.
     """)
-    
     col1, col2 = st.columns(2)
 
     with col1:
-        internet_service = st.selectbox("Internet Service: Fiber Optic (0 = No, 1 = Yes)", [0, 1])
-        payment_method = st.selectbox("Payment Method: Electronic Check (0 = No, 1 = Yes)", [0, 1])
-        paperless_billing = st.selectbox("Paperless Billing (0 = No, 1 = Yes)", [0, 1])
+        internet_service = st.selectbox("Internet Service: Fiber Optic (0=No, 1=Yes)", [0,1])
+        payment_method = st.selectbox("Payment Method: Electronic Check (0=No, 1=Yes)", [0,1])
+        paperless_billing = st.selectbox("Paperless Billing (0=No, 1=Yes)", [0,1])
 
     with col2:
-        senior_citizen = st.selectbox("Senior Citizen (0 = No, 1 = Yes)", [0, 1])
-        streaming_tv = st.selectbox("Streaming TV: (0 = No, 1 = Yes)", [0, 1])
-        monthly_charges = st.number_input(
-            "Monthly Charges (in $)", 
-            min_value=18.25, 
-            max_value=118.75, 
-            value=60.0, 
-            step=0.5
-        )
+        senior_citizen = st.selectbox("Senior Citizen (0=No, 1=Yes)", [0,1])
+        streaming_tv = st.selectbox("Streaming TV: (0=No, 1=Yes)", [0,1])
+        monthly_charges = st.number_input("Monthly Charges ($)", min_value=18.25, max_value=118.75, value=60.0, step=0.5)
 
-# ---------------------------------------------------
-# Prediction Button
-# ---------------------------------------------------
-if st.button("🔍 Predict Churn"):
-    data = {
-        "features": [
-            internet_service,
-            payment_method,
-            paperless_billing,
-            senior_citizen,
-            streaming_tv,
-            monthly_charges
-        ]
-    }
+# ----------------------------
+# Prediction Button with Spinner
+# ----------------------------
+if st.button("🔍 Predict Churn Risk"):
 
-    # Replace with your deployed FastAPI URL
     url = "https://customer-churn-api-pe3n.onrender.com/predict"
+    data = {"features": [internet_service, payment_method, paperless_billing, senior_citizen, streaming_tv, monthly_charges]}
 
     try:
-        response = requests.post(url, json=data)
-        result = response.json()
-        prediction = result.get("prediction", None)
+        with st.spinner("Predicting churn risk..."):
+            response = requests.post(url, json=data)
+            response.raise_for_status()
+            result = response.json()
 
-        if prediction is not None:
-            if prediction == 1:
-                st.error("🚨 The customer is **likely to churn.**")
-                st.info("""
-                💡 **Suggestions to retain this customer:**
-                - Offer loyalty discounts or personalized bundles.
-                - Improve customer engagement with dedicated support.
-                - Provide value-added services or better contract offers.
-                """)
+        if "prediction" in result:
+            pred = result["prediction"]
+
+            if pred == 1:
+                st.markdown("""
+                    <div style="
+                        background: linear-gradient(135deg, #ff7f7f, #ff4b4b);
+                        color:white;
+                        padding:25px;
+                        border-radius:20px;
+                        text-align:center;
+                        font-size:24px;
+                        font-weight:bold;
+                        box-shadow: 0 0 20px rgba(255,0,0,0.6);
+                        animation: glow 1.5s infinite alternate;
+                    ">
+                        🚨 <span style='font-size:30px; animation: pulse 1s infinite;'>High Risk!</span>  
+                        The customer might churn
+                        <br><br>
+                        <span style="font-size:16px;font-weight:normal; color:#fff8f0;">
+                        💡 Suggestions to retain customer:<br>
+                        - Offer loyalty discounts<br>
+                        - Improve engagement & support<br>
+                        - Provide value-added services
+                        </span>
+                    </div>
+                    <style>
+                    @keyframes glow {
+                        0% { box-shadow: 0 0 15px rgba(255,0,0,0.4); }
+                        100% { box-shadow: 0 0 25px rgba(255,0,0,0.8); }
+                    }
+                    @keyframes pulse {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.2); }
+                        100% { transform: scale(1); }
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
             else:
-                st.success("✅ The customer is **not likely to churn.**")
-                st.balloons()
-                st.info("""
-                🎯 **Retention Tips:**
-                - Maintain high service quality and reliability.
-                - Offer small loyalty rewards to encourage long-term stay.
-                - Keep consistent communication for engagement.
-                """)
+                st.markdown("""
+                    <div style="
+                        background: linear-gradient(135deg, #a0f7a0, #28a745);
+                        color:white;
+                        padding:25px;
+                        border-radius:20px;
+                        text-align:center;
+                        font-size:24px;
+                        font-weight:bold;
+                        box-shadow: 0 0 20px rgba(0,200,0,0.6);
+                        animation: glow 1.5s infinite alternate;
+                    ">
+                        💚 <span style='font-size:28px; animation: pulse 1s infinite;'>Low Risk!</span>  
+                        The customer is not likely to churn
+                        <br><br>
+                        <span style="font-size:16px;font-weight:normal; color:#f0fff0;">
+                        🎯 Retention Tips:<br>
+                        - Maintain quality service<br>
+                        - Offer loyalty rewards<br>
+                        - Keep customer engagement high
+                        </span>
+                    </div>
+                    <style>
+                    @keyframes glow {
+                        0% { box-shadow: 0 0 15px rgba(0,200,0,0.4); }
+                        100% { box-shadow: 0 0 25px rgba(0,200,0,0.8); }
+                    }
+                    @keyframes pulse {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.15); }
+                        100% { transform: scale(1); }
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
         else:
-            st.warning("⚠️ Unable to retrieve prediction from API. Please try again later.")
+            st.warning("⚠️ No prediction received. Please try again.")
 
-    except Exception as e:
-        st.error(f"Error connecting to API: {e}")
-        st.warning("🌐 Please check your internet connection or try again later.")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error connecting to API: {e}. Try again or check your internet connection.")
 
-# ---------------------------------------------------
-# Footer
-# ---------------------------------------------------
-st.markdown("""
-<hr>
-<div style='text-align:center; font-size: 0.9rem; color: gray;'>
-    🤖 Built with ❤️ using Streamlit & FastAPI
+# ----------------------------
+# Input Summary
+# ----------------------------
+st.subheader("📋 Input Summary")
+input_data = {
+    "InternetService_Fiber optic": [internet_service],
+    "PaymentMethod_Electronic check": [payment_method],
+    "PaperlessBilling": [paperless_billing],
+    "SeniorCitizen": [senior_citizen],
+    "StreamingTV_Yes": [streaming_tv],
+    "MonthlyCharges": [monthly_charges]
+}
+df_input = pd.DataFrame(input_data)
+
+st.markdown(f"""
+<div class="table-container" style="
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #89f7fe);
+    padding: 12px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: #333333;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+">
+{df_input.to_html(index=False, escape=False)}
 </div>
 """, unsafe_allow_html=True)
 
+# ----------------------------
+# Prediction timestamp & Download
+# ----------------------------
+prediction_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+st.markdown(f"""
+<p style="text-align:right; font-size:12px; color:gray;">
+Last prediction timestamp: {prediction_time}
+</p>
+""", unsafe_allow_html=True)
+
+st.download_button(
+    label="📥 Download Input Summary as CSV",
+    data=df_input.to_csv(index=False),
+    file_name="customer_churn_input_summary.csv",
+    mime="text/csv",
+    help="Download the customer input data for your records"
+)
+
+# ----------------------------
+# Footer
+# ----------------------------
+st.markdown("""
+<hr>
+<p style="text-align:center; font-size:14px;">
+Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
+</p>
+""", unsafe_allow_html=True)
