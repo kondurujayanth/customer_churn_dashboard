@@ -20,7 +20,7 @@ st.markdown("""
 <style>
 /* Main App Background */
 .stApp {
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #89f7fe);
     font-family: 'Arial', sans-serif;
     color: #333;
 }
@@ -254,3 +254,4 @@ st.markdown("""
 Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
 </p>
 """, unsafe_allow_html=True)
+
