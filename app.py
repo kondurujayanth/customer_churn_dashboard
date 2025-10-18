@@ -5,7 +5,7 @@ import requests
 # Page Config
 # ---------------------------------------------------
 st.set_page_config(
-    page_title="💼 Customer Churn Prediction Dashboard",
+    page_title="Customer Churn Prediction",
     page_icon="🤖",
     layout="centered",
     initial_sidebar_state="expanded"
@@ -89,7 +89,7 @@ with st.sidebar:
 # ---------------------------------------------------
 # Main Page
 # ---------------------------------------------------
-st.title("💼 Customer Churn Prediction Dashboard")
+st.title("🤖 AI Powered Customer Churn Prediction")
 st.write("Predict whether a customer is likely to **churn** or stay based on their telecom service details.")
 
 # ---------------------------------------------------
@@ -178,3 +178,4 @@ st.markdown("""
     🤖 Built with ❤️ using Streamlit & FastAPI
 </div>
 """, unsafe_allow_html=True)
+
