@@ -109,9 +109,9 @@ This dashboard predicts the **Risk of customer churn** in a telecom company.
 **Model Type:** Binary Classification (Churn=1, No Churn=0)
 
 Built with 
-<br>**FastAPI + Streamlit**  
+**FastAPI + Streamlit**  
 Developer: 
-<br>**Konduru Jayanth**
+**Konduru Jayanth**
 """)
 
 # ----------------------------
@@ -256,6 +256,7 @@ st.markdown("""
 Made with ❤️ using <b>FastAPI + Streamlit</b> | Developed by <b>Konduru Jayanth</b>
 </p>
 """, unsafe_allow_html=True)
+
 
 
 
